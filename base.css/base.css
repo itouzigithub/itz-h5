@@ -1,0 +1,316 @@
+/** 
+ * 重要声明
+ * 此代码不一定是最新版，仅供阅读
+ * 实际开发请从 svn 库中引用
+ * 地址：
+ */
+
+/**
+ * author Bison
+ * update 2017-07
+ * version 1.0
+ *
+ * 针对移动端的 CSS 通用基础库
+ *
+ * 架构设计参考 ITCSS (http://hao.jobbole.com/itcss/)
+ * 作为通用基础库，只提供三类样式：Basic Reset，OOCSS，Basic Tools
+ * OOCSS 与 Basic Tools 是供开发调用的，均以类名的形式调用
+ * 设计原则一：最小子集原则，不提供任何具体的 UI 样式，确保代码体积和学习成本最小化
+ * 设计原则二：最小干扰原则，尽可能保持最小选择器权重
+ * 设计原则三：最大通用原则，只有大概率会被用到的代码才会出现在这里
+ *     常见的 reset 库会对一些偏僻的标签如 sup、kbd、abbr 等进行处理
+ *     在基础库中为这种极少使用的标签编写代码，常常徒增文件体积，毫无用处
+ *     基础库只考虑通用样式，特殊样式、非常用样式请自行编写
+ * 设计原则四：最简记忆原则，供调用的名称必须最容易记忆和使用
+ * 任何修改请遵循上述原则
+ */
+
+/**
+ * CHANGE LOG
+ * update
+ * version 1.x
+ *
+ */
+
+/* ----------------------------------------------------------------------------------- */
+/* ----------------------------------- Basic Reset ----------------------------------- */
+/* ----------------------------------------------------------------------------------- */
+html {
+  height: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+/* 以 iphone6 的 375px 为基准宽度，加减 25px */
+@media screen and (max-width: 350px) { 
+  html { 
+    font-size: 12px;
+  }
+}
+@media screen and (min-width: 400px) { 
+  html { 
+    font-size: 16px;
+  }
+}
+body {
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: none;
+  /* IOS 滚动回弹效果 */
+  -webkit-overflow-scrolling: touch;
+}
+*, 
+*:before, 
+*:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+:active,
+:hover,
+:focus {
+  outline: 0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+}
+a {
+  color: inherit;
+  text-decoration: none;
+  background-color: transparent;
+  /* 屏蔽 IOS 长按显示系统菜单 */
+  -webkit-touch-callout: none;
+}
+ul, 
+ol {
+  list-style: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+img {
+  border-style: none;
+}
+/* ----------------------------------- 表单元素 ----------------------------------- */
+input,
+button,
+select,
+textarea {
+  outline: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  -webkit-appearance: none;
+}
+button {
+  border: 0;
+  background: none; 
+}
+textarea {
+  resize: none;
+}
+
+/* ----------------------------------------------------------------------------------- */
+/* ----------------------------------- Basic Tools ----------------------------------- */
+/* ----------------------------------------------------------------------------------- */
+.disabled {
+  user-select: none;
+  pointer-events: none;
+  opacity: .4;
+}
+.clearfix:after {
+  content: '';
+  display: block;
+  height: 0;
+  clear: both;
+  opacity: 0;
+}
+.bg {
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+/* 单行文本超长省略... */
+.ell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* ----------------------------------- 布局相关 ----------------------------------- */
+.flex {
+  display: -webkit-box;
+  display: box;
+  display: -webkit-flex;
+  display: flex;
+}
+.flex-col {
+  -webkit-box-orient: vertical;
+          box-orient: vertical;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+}
+.flex-grow {
+  -webkit-box-flex: 1;
+          box-flex: 1;
+  -webkit-flex-grow: 1;
+          flex-grow: 1;
+}
+/* 水平居中（flex 方向为水平） */
+.center {
+  -webkit-box-pack: center;
+          box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+/* 垂直居中（flex 方向为水平） */
+.middle {
+  -webkit-box-align: center;
+          box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+/* 上下左右居中，元素须有宽高 */
+.central {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  margin: auto;
+}
+
+/* ----------------------------------------------------------------------------------- */
+/* -------------------------------------- OOCSS -------------------------------------- */
+/* ----------------------------------------------------------------------------------- */
+.l   { float: left }
+.r   { float: right }
+.dn  { display: none }
+.db  { display: block }
+.dib { display: inline-block }
+.abs { position: absolute }
+.rel { position: relative }
+.tc  { text-align: center }
+.vm  { vertical-align: middle }
+.ovh { overflow: hidden }
+
+/* 以 1rem = 14px 为基准 */
+.f10 { font-size: 0.714rem }
+.f12 { font-size: 0.857rem }
+.f14 { font-size: 1.000rem }
+.f16 { font-size: 1.143rem }
+.f18 { font-size: 1.286rem }
+.f20 { font-size: 1.428rem }
+.f22 { font-size: 1.571rem }
+.f24 { font-size: 1.714rem }
+.f26 { font-size: 1.857rem }
+.f28 { font-size: 2.000rem }
+.f30 { font-size: 2.143rem }
+.f32 { font-size: 2.286rem }
+.f34 { font-size: 2.428rem }
+.f36 { font-size: 2.571rem }
+/* 可用于消除图片底部间隙 */
+.f0  { font-size: 0px }
+
+.mt2  { margin-top: 2px }
+.mt4  { margin-top: 4px }
+.mt5  { margin-top: 5px }
+.mt6  { margin-top: 6px }
+.mt8  { margin-top: 8px }
+.mt10 { margin-top: 10px }
+.mt15 { margin-top: 15px }
+.mt20 { margin-top: 20px }
+.mt25 { margin-top: 25px }
+.mt30 { margin-top: 30px }
+.mt35 { margin-top: 35px }
+.mt40 { margin-top: 40px }
+.mt45 { margin-top: 45px }
+.mt50 { margin-top: 50px }
+.ml2  { margin-left: 2px }
+.ml4  { margin-left: 4px }
+.ml6  { margin-left: 6px }
+.ml8  { margin-left: 8px }
+.ml10 { margin-left: 10px }
+.ml15 { margin-left: 15px }
+.ml20 { margin-left: 20px }
+.ml25 { margin-left: 25px }
+.ml30 { margin-left: 30px }
+.ml35 { margin-left: 35px }
+.ml40 { margin-left: 40px }
+.ml45 { margin-left: 45px }
+.ml50 { margin-left: 50px }
+.mr2  { margin-right: 2px }
+.mr4  { margin-right: 4px }
+.mr6  { margin-right: 6px }
+.mr8  { margin-right: 8px }
+.mr10 { margin-right: 10px }
+.mr15 { margin-right: 15px }
+.mr20 { margin-right: 20px }
+.mr25 { margin-right: 25px }
+.mr30 { margin-right: 30px }
+.mr35 { margin-right: 35px }
+.mr40 { margin-right: 40px }
+.mr45 { margin-right: 45px }
+.mr50 { margin-right: 50px }
+.mb2  { margin-bottom: 2px }
+.mb4  { margin-bottom: 4px }
+.mb6  { margin-bottom: 6px }
+.mb8  { margin-bottom: 8px }
+.mb10 { margin-bottom: 10px }
+.mb15 { margin-bottom: 15px }
+.mb20 { margin-bottom: 20px }
+.mb25 { margin-bottom: 25px }
+.mb30 { margin-bottom: 30px }
+.mb35 { margin-bottom: 35px }
+.mb40 { margin-bottom: 40px }
+.mb45 { margin-bottom: 45px }
+.mb50 { margin-bottom: 50px }
+
+.pt2  { padding-top: 2px }
+.pt4  { padding-top: 4px }
+.pt6  { padding-top: 6px }
+.pt8  { padding-top: 8px }
+.pt10 { padding-top: 10px }
+.pt15 { padding-top: 15px }
+.pt20 { padding-top: 20px }
+.pt25 { padding-top: 25px }
+.pt30 { padding-top: 30px }
+.pt35 { padding-top: 35px }
+.pt40 { padding-top: 40px }
+.pt45 { padding-top: 45px }
+.pt50 { padding-top: 50px }
+.pl2  { padding-left: 2px }
+.pl4  { padding-left: 4px }
+.pl6  { padding-left: 6px }
+.pl8  { padding-left: 8px }
+.pl10 { padding-left: 10px }
+.pl15 { padding-left: 15px }
+.pl20 { padding-left: 20px }
+.pl25 { padding-left: 25px }
+.pl30 { padding-left: 30px }
+.pl35 { padding-left: 35px }
+.pl40 { padding-left: 40px }
+.pl45 { padding-left: 45px }
+.pl50 { padding-left: 50px }
+.pr2  { padding-right: 2px }
+.pr4  { padding-right: 4px }
+.pr6  { padding-right: 6px }
+.pr8  { padding-right: 8px }
+.pr10 { padding-right: 10px }
+.pr15 { padding-right: 15px }
+.pr20 { padding-right: 20px }
+.pr25 { padding-right: 25px }
+.pr30 { padding-right: 30px }
+.pr35 { padding-right: 35px }
+.pr40 { padding-right: 40px }
+.pr45 { padding-right: 45px }
+.pr50 { padding-right: 50px }
+.pb2  { padding-bottom: 2px }
+.pb4  { padding-bottom: 4px }
+.pb6  { padding-bottom: 6px }
+.pb8  { padding-bottom: 8px }
+.pb10 { padding-bottom: 10px }
+.pb15 { padding-bottom: 15px }
+.pb20 { padding-bottom: 20px }
+.pb25 { padding-bottom: 25px }
+.pb30 { padding-bottom: 30px }
+.pb35 { padding-bottom: 35px }
+.pb40 { padding-bottom: 40px }
+.pb45 { padding-bottom: 45px }
+.pb50 { padding-bottom: 50px }
