@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+</head>
+<style>
+  html,
+  body {
+    height: 100%;
+    touch-action: none;
+    margin: 0;
+    padding: 0;
+  }
+  .app {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+  .app > div {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+  }
+  .box {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    background-color: #eee;
+    transition: all 1s;
+  }
+  [status="-1"] .box {
+    transform: translateY(800px);
+  }
+  [status="1"] .box {
+    transform: translateY(-800px);
+  }
+  .box-2 {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    opacity: 0;
+  }
+  [last="1"] [flag="0"] .box-2 {
+    animation: fromLeft 1s linear forwards;
+  }
+  @keyframes fromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+  [last="3"] [flag="0"] .box-2 {
+    animation: fromRight 1s linear forwards;
+  }
+  @keyframes fromRight {
+    from {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+  [last="2"] [status="1"] .box-2 {
+    animation: toTop 1s;
+  }
+  @keyframes toTop {
+    from {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-800px);
+    }
+  }
+  [last="2"] [status="-1"] .box-2 {
+    animation: toBottom 1s;
+  }
+  @keyframes toBottom {
+    from {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(800px);
+    }
+  }
+
+  img {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    opacity: 0;
+    transition: all 1s;
+  }
+  /* 进场动画 */
+  [status="0"] img {
+    animation: fadeIn 1s 1s forwards;
+  }
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+  /* 离场动画 */
+  [last="3"] img {
+    animation: fadeOut 1s;
+  }
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+  }
+  h2 {
+    color: #999;
+    margin-top: 40%;
+    text-align: center;
+    transition: all 1s;
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  [status="0"] h2 {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+
+  span {
+    opacity: 0;
+  }
+  [status="0"] span {
+    opacity: 1;
+  }
+</style>
+<body>
+
+  <div id="app" class="app">
+    <div id="0" status="0" flag="0">
+      <span>0</span>
+      <div class="box"></div>
+    </div>
+
+    <div id="1" status="-1" flag="-1">
+      <span>1</span>
+      <div class="box"></div>
+    </div>
+
+    <div id="2" status="-1" flag="-1">
+      <span>2</span>
+      <div class="box-2" data-src="cat.png"></div>
+    </div>
+
+    <div id="3" status="-1" flag="-1">
+      <span>3</span>
+      <img data-src="cat.png" width="100px">
+    </div>
+
+    <div id="4" status="-1">
+      <span>4</span>
+      <h2>end</h2>
+    </div>
+  </div>
+
+  <script src="../fullScreen.js"></script>
+  <script>
+    // new fullScreen('app', {
+    //   current: 2
+    // })
+    new fullScreen('app')
+  </script>
+  
+</body>
+</html>

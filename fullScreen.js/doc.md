@@ -1,5 +1,5 @@
 # 移动端全屏滑动式应用框架
-针对全屏滑动型的展示性页面，灵活处理进场、退场动效
+针对全屏滑动型的展示性页面，灵活处理进场、退场动效<br>
 author Bison<br>
 update 2017-07
 
@@ -72,10 +72,9 @@ update 2017-07
 
 - 最外层节点（#fullScreen）的直属子节点只能是每个页面组件的父节点，不能掺杂其它的节点
 
-- id 是必填的，status 和 flag 是选填的
+- id 和 status 是必填的，flag 是选填的
 
-- fullScreen.js 内置了图片懒加载功能，该方法在滑屏时调用，默认预先加载当前页下一页的图片资源
-因此懒加载只对第 3 页及以后的页面有用，前两屏的资源必须直接加载
+- fullScreen.js 内置了图片懒加载功能，该方法在滑屏时调用，默认预先加载当前页下一页的图片资源，因此懒加载只对从 0 算起的第 2 页及以后的页面有用，前两屏的资源必须直接加载。
 设置懒加载的方法就是将图片 url 写在 data-src 属性中，fullScreen.js 会检测，如果是 img 节点，则设置 src，否则会设置成背景图
 
 - flag 属性值会与 status 保持同步，它们之间唯一的区别在于：滑屏动作结束时（touchend），status 的值会立即改变，而 flag 的值是在滑屏切换过渡期（默认为 1 秒）结束时才改变
@@ -154,6 +153,11 @@ update 2017-07
 
 ### CSS 代码参考
 ```css
+html,
+body {
+  height: 100%;
+  touch-action: none;
+}
 .fullScreen {
   width: 100%;
   height: 100%;
@@ -164,7 +168,8 @@ update 2017-07
 .fullScreen > div {
   width: 100%;
   height: 100%;
-  position: relative;
+  position: absolute;
+  top: 0;
 }
 ```
 
@@ -173,15 +178,15 @@ update 2017-07
 // @id { String } 节点 id 名称，必填
 // @option { Object } 所有属性选填
 var fs = new fullScreen(id, {
-  duration: 1,  // { Number } 滑屏过渡时间
-  current: 0,    // { Number } 当前页面处于哪一屏，用于调试
-  beforeLeave: function (current, last) {}, // 当前页面即将离开前
-  afterLeave: function (current, last) {},  // 当前页面离开后
-  beforeEnter: function (current, last) {}, // 下一个页面即将进入前
-  afterEnter: function (current, last) {}   // 下一个页面进入后
+  duration: 1000,  // { Number } 滑屏过渡时间，单位 ms
+  current: 0       // { Number } 当前页面处于哪一屏，用于调试
 })
 ```
 
 说明：
+- duration 期间滑动事件会被锁住，因为动效可能还没有执行完
 - 在调试阶段，为了看到第 n 页的动效，每次刷新后都要手动滑屏滑 n 次才能看到，或者必须自己手动修改 status 的值，这是非常麻烦的，因此调试阶段设置 current 属性，可以直接跳到第 n 页
 
+### 可能的缺陷
+- 所有页面滑屏切换的过渡期是一样的，当然，如果不一样，应视为设计的缺陷
+- 从 0 开始计算页数，可能违背通常的计数习惯
