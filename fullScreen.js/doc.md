@@ -69,6 +69,7 @@ update 2017-07
   var fs = new fullScreen('fullScreen', options);
 </script>
 ```
+
 - 最外层节点（#fullScreen）的直属子节点只能是每个页面组件的父节点，不能掺杂其它的节点
 
 - id 是必填的，status 和 flag 是选填的
@@ -78,6 +79,7 @@ update 2017-07
 设置懒加载的方法就是将图片 url 写在 data-src 属性中，fullScreen.js 会检测，如果是 img 节点，则设置 src，否则会设置成背景图
 
 - flag 属性值会与 status 保持同步，它们之间唯一的区别在于：滑屏动作结束时（touchend），status 的值会立即改变，而 flag 的值是在滑屏切换过渡期（默认为 1 秒）结束时才改变
+
 ```css
 /* 当前页面还没有离开，下一页的 el 元素就立即显示 */
 .el {
@@ -86,6 +88,7 @@ update 2017-07
 [status="0"] .el {
   opacity: 1;
 }
+```
 ```css
 /* 当前页面完全离开以后，下一页的 el 元素才显示 */
 .el {
@@ -177,6 +180,7 @@ var fs = new fullScreen(id, {
   beforeEnter: function (current, last) {}, // 下一个页面即将进入前
   afterEnter: function (current, last) {}   // 下一个页面进入后
 })
+```
 
 说明：
 - 在调试阶段，为了看到第 n 页的动效，每次刷新后都要手动滑屏滑 n 次才能看到，或者必须自己手动修改 status 的值，这是非常麻烦的，因此调试阶段设置 current 属性，可以直接跳到第 n 页
