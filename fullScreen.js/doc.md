@@ -10,7 +10,7 @@
 - -1：页面在视区外的下方
 - 0： 页面在视区内
 - 1： 页面在视区外的上方
-元件的进入和离开均用 css 实现：
+<br>元件的进入和离开均用 css 实现：
 
 ```css
 .el {
@@ -159,6 +159,7 @@ body {
   touch-action: none;
 }
 .fullScreen {
+  position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;

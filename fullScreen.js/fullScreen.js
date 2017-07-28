@@ -10,7 +10,7 @@ function fullScreen (id, option) {
   }
 
   var result = this.extend({
-  	current: 0,
+    current: 0,
     duration: 1000
   }, option)
 
@@ -26,7 +26,7 @@ function fullScreen (id, option) {
   if (result.current && result.current > 0 && result.current < this.total) {
     this.debug(result.current)
   } else {
-	  el.setAttribute('last', this.last.toString());
+    el.setAttribute('last', this.last.toString());
   }
 }
 
@@ -121,26 +121,26 @@ fullScreen.prototype.preload = function (current) {
 }
 
 fullScreen.prototype.debug = function (id) {
-	var last = id - 1;
-	this.current = id;
-	this.el.setAttribute('last', last.toString());
+  var last = id - 1;
+  this.current = id;
+  this.el.setAttribute('last', last.toString());
 
-	attr(document.getElementById(id.toString()), '0');
+  attr(document.getElementById(id.toString()), '0');
 
-	while (id-- > 0) {
-		attr(document.getElementById(id.toString()), '1');
-	}
+  while (id-- > 0) {
+    attr(document.getElementById(id.toString()), '1');
+  }
 
-	for (var i = 1; i < this.total; i++) {
-		this.preload(i);
-	}
+  for (var i = 1; i < this.total; i++) {
+    this.preload(i);
+  }
 
-	function attr (node, value) {
-		node.setAttribute('status', value);
-		if (node.getAttribute('flag') !== undefined) {
-			node.setAttribute('flag', value);
-		}
-	}
+  function attr (node, value) {
+    node.setAttribute('status', value);
+    if (node.getAttribute('flag') !== undefined) {
+      node.setAttribute('flag', value);
+    }
+  }
 }
 
 fullScreen.prototype.extend = function (tar, src) {
