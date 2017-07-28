@@ -10,11 +10,11 @@
 ```html
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
   <link rel="dns-prefetch" href="//css10-itzcdn-com.alikunlun.com">
   <link rel="dns-prefetch" href="//js10-itzcdn-com.alikunlun.com">
   <link rel="dns-prefetch" href="//img3-itzcdn-com.alikunlun.com">
-  <meta name="keywords" content="爱投资,投资理财,P2C理财_P2P理财,个人理财,网上投资">
+  <meta name="keywords" content="爱投资,投资理财,P2C理财,P2P理财,个人理财,网上投资">
   <meta name="description" content="安全规范的互联网金融投资理财平台，丰富多样、本息全额保障的高收益理财产品，大众化的低门槛投资，全免费的服务体验。爱投资，值得爱">
   <meta name="screen-orientation" content="portrait">
   <meta name="x5-orientation" content="portrait">
@@ -28,7 +28,7 @@
 
 #### 基础库
 - 所有移动端项目必须引入 base.css。使用 fis3 编译的项目，请用 __inline 形式引入
-- 如需使用 $ 选择方法或 ajax 库，首选 sizzle.js 或 zepto，不推荐 jQuery、vue-resource、axios
+- 如需使用 $ 选择方法或 ajax 库，首选 sizzle.js 或 zepto，出于兼容考虑，不推荐 jQuery、vue-resource、axios
 
 ### 参考
 #### 主流网站 header 设置参考
