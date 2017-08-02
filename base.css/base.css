@@ -58,6 +58,8 @@ body {
   touch-action: none;
   /* IOS 滚动回弹效果 */
   -webkit-overflow-scrolling: touch;
+  /* https://github.com/AlloyTeam/Mars/blob/master/solutions/font-family.md */
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei"
 }
 *, 
 *:before, 
