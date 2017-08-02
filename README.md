@@ -16,10 +16,8 @@
   <link rel="dns-prefetch" href="//img3-itzcdn-com.alikunlun.com">
   <meta name="keywords" content="爱投资,投资理财,P2C理财,P2P理财,个人理财,网上投资">
   <meta name="description" content="安全规范的互联网金融投资理财平台，丰富多样、本息全额保障的高收益理财产品，大众化的低门槛投资，全免费的服务体验。爱投资，值得爱">
-  <meta name="screen-orientation" content="portrait">
-  <meta name="x5-orientation" content="portrait">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="applicable-device" content="mobile">
   <meta name="format-detection" content="telephone=no">
   <meta http-equiv="Cache-Control" content="no-cache">
