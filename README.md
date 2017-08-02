@@ -28,7 +28,7 @@
 
 #### 基础库
 - 所有移动端项目必须引入 base.css。使用 fis3 编译的项目，请用 __inline 形式引入
-- 如需使用 $ 选择方法或 ajax 库，首选 sizzle.js 或 zepto，出于兼容考虑，不推荐 jQuery、vue-resource、axios
+- 如需使用 $ 选择方法或 ajax 库，首选 sizzle.js 或 zepto，不推荐 jQuery、vue-resource、axios
 
 ### 参考
 #### 主流网站 header 设置参考
