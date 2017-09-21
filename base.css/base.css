@@ -56,8 +56,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
   touch-action: none;
-  /* IOS 滚动回弹效果 */
-  -webkit-overflow-scrolling: touch;
+  word-wrap: break-word;
   /* https://github.com/AlloyTeam/Mars/blob/master/solutions/font-family.md */
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei"
 }
@@ -78,8 +77,11 @@ a {
   color: inherit;
   text-decoration: none;
   background-color: transparent;
+}
+a:not([download]) {
   /* 屏蔽 IOS 长按显示系统菜单 */
   -webkit-touch-callout: none;
+  touch-callout: none;
 }
 ul, 
 ol {
@@ -110,14 +112,22 @@ button {
 textarea {
   resize: none;
 }
+::-webkit-clear-button {
+  -webkit-appearance: none; 
+}
+::-webkit-inner-spin-button {
+  visibility: hidden; 
+}
 
 /* ----------------------------------------------------------------------------------- */
 /* ----------------------------------- Basic Tools ----------------------------------- */
 /* ----------------------------------------------------------------------------------- */
 .disabled {
-  user-select: none;
   pointer-events: none;
-  opacity: .4;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-callout: none;
 }
 .clearfix:after {
   content: '';
@@ -190,6 +200,8 @@ textarea {
 .tc  { text-align: center }
 .vm  { vertical-align: middle }
 .ovh { overflow: hidden }
+.ovy { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.fwl { font-weight: lighter }
 
 /* 以 1rem = 14px 为基准 */
 .f10 { font-size: 0.714rem }
