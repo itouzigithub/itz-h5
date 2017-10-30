@@ -29,7 +29,6 @@
  * CHANGE LOG
  * update
  * version 1.x
- *
  */
 
 /* ----------------------------------------------------------------------------------- */
@@ -41,12 +40,12 @@ html {
   font-size: 14px;
 }
 /* 以 iphone6 的 375px 为基准宽度，加减 25px */
-@media screen and (max-width: 350px) { 
+@media screen and (max-width: 350px) {
   html { 
-    font-size: 12px;
+    font-size: 13px;
   }
 }
-@media screen and (min-width: 400px) { 
+@media screen and (min-width: 400px) {
   html { 
     font-size: 16px;
   }
@@ -54,7 +53,8 @@ html {
 body {
   height: 100%;
   -webkit-font-smoothing: antialiased;
-  -webkit-text-size-adjust: 100%;
+  /* https://juejin.im/post/59f678d7f265da43333dabb7 */
+  -webkit-text-size-adjust: 100% !important;
   touch-action: none;
   word-wrap: break-word;
   /* https://github.com/AlloyTeam/Mars/blob/master/solutions/font-family.md */
@@ -201,7 +201,7 @@ textarea {
 .vm  { vertical-align: middle }
 .ovh { overflow: hidden }
 .ovy { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-.fwl { font-weight: lighter }
+.lighter { font-weight: 300 }
 
 /* 以 1rem = 14px 为基准 */
 .f10 { font-size: 0.714rem }
