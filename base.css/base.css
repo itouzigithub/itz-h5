@@ -12,7 +12,9 @@
  *
  * 针对移动端的 CSS 通用基础库
  *
- * 架构设计参考 ITCSS (http://hao.jobbole.com/itcss/)
+ * > 架构设计参考 ITCSS (http://hao.jobbole.com/itcss/)
+ * > 参考二 bootstrap.reboot.css (https://github.com/twbs/bootstrap/blob/v4-dev/dist/css/bootstrap-reboot.css)
+ *
  * 作为通用基础库，只提供三类样式：Basic Reset，OOCSS，Basic Tools
  * OOCSS 与 Basic Tools 是供开发调用的，均以类名的形式调用
  * 设计原则一：最小子集原则，不提供任何具体的 UI 样式，确保代码体积和学习成本最小化
@@ -55,7 +57,6 @@ body {
   -webkit-font-smoothing: antialiased;
   /* https://juejin.im/post/59f678d7f265da43333dabb7 */
   -webkit-text-size-adjust: 100% !important;
-  touch-action: none;
   word-wrap: break-word;
   /* https://github.com/AlloyTeam/Mars/blob/master/solutions/font-family.md */
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei"
@@ -71,7 +72,7 @@ body {
 :hover,
 :focus {
   outline: 0;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 a {
   color: inherit;
@@ -92,6 +93,7 @@ table {
   border-spacing: 0;
 }
 img {
+  vertical-align: middle;
   border-style: none;
 }
 /* ----------------------------------- 表单元素 ----------------------------------- */
@@ -117,6 +119,10 @@ textarea {
 }
 ::-webkit-inner-spin-button {
   visibility: hidden; 
+}
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
 }
 
 /* ----------------------------------------------------------------------------------- */
