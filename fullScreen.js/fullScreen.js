@@ -1,6 +1,5 @@
 /**
- * author Bison
- * update 2017-07
+ * Doc: https://github.com/itouzigithub/itz-h5/blob/master/fullScreen.js/doc.md
  */
 
 function fullScreen (id, option) {
@@ -11,7 +10,9 @@ function fullScreen (id, option) {
 
   var result = this.extend({
     current: 0,
-    duration: 1000
+    duration: 1000,
+    onChange: function () {},
+    publicPath: ''
   }, option)
 
   this.el = el;
@@ -20,6 +21,9 @@ function fullScreen (id, option) {
   this.current = 0;                         // 当前页 id
   this.duration = result.duration           // 过渡期
   this.loaded = [];                         // 已加载图片的页面 id
+  this.onChange = result.onChange;          // 钩子函数，页面变化时调用
+  this.publicPath = result.publicPath;
+  this.max = result.max || 50;
   this.lock = false;
   this.init();
 
@@ -37,11 +41,11 @@ fullScreen.prototype.init = function () {
 
   document.addEventListener('touchstart', function (e) {
     if (_this.lock) return;
+    distance = 0;
     start = e.touches[0].pageY;
   }, false);
 
   document.addEventListener('touchmove', function (e) {
-    e.preventDefault();
     if (_this.lock) return;
     distance = e.touches[0].pageY - start;
   }, false);
@@ -49,15 +53,13 @@ fullScreen.prototype.init = function () {
   document.addEventListener('touchend', function () {
     if (_this.lock) return;
     _this.lock = true;
-
     setTimeout(function () {
       _this.lock = false;
     }, _this.duration)
-
-    if (distance > 50) {
+    if (distance > _this.max) {
       _this.handleStatus(-1);
     }
-    if (distance < -50) {
+    if (distance < -_this.max) {
       _this.handleStatus(1);
       _this.preload(_this.current);
     }
@@ -73,6 +75,7 @@ fullScreen.prototype.handleStatus = function (dir) {
 
   this.last = this.current;
   this.el.setAttribute('last', this.last.toString());
+  this.el.setAttribute('dir', dir.toString())
 
   var id = this.current.toString();
   var cur = document.getElementById(id);
@@ -95,6 +98,8 @@ fullScreen.prototype.handleStatus = function (dir) {
       next.setAttribute('flag', '0');
     }, this.duration)
   }
+
+  this.onChange(this.current)
 }
 
 /**
@@ -109,6 +114,7 @@ fullScreen.prototype.preload = function (current) {
   for (var i = 0, len = imgs.length; i < len; i++) {
     var url = imgs[i].getAttribute('data-src');
     if (url) {
+      url = this.publicPath + url;
       if (imgs[i].nodeName === "IMG") {
         imgs[i].src = url;
       } else {

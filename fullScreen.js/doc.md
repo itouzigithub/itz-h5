@@ -52,8 +52,8 @@
 
 ### HTML 结构
 ```html
-<!-- last 属性由 fullScreen 自动添加，其它的需要手写 -->
-<div id="fullScreen" last="0">
+<!-- last 和 dir 属性由 fullScreen 自动添加，其它的需要手写 -->
+<div id="fullScreen" last="0" dir="1">
   <!-- 封面 -->
   <div id="0" status="0" flag="0"></div>
   <!-- 第一页 -->
@@ -79,6 +79,8 @@
 
 - flag 属性值会与 status 保持同步，它们之间唯一的区别在于：滑屏动作结束时（touchend），status 的值会立即改变，而 flag 的值是在滑屏切换过渡期（默认为 1 秒）结束时才改变
 
+- dir 属性表示滑动的方向，-1 表示向下滑，1 表示向上滑
+
 ```css
 /* 当前页面还没有离开，下一页的 el 元素就立即显示 */
 .el {
@@ -98,7 +100,9 @@
 }
 ```
 
+
 ### CSS 结构
+
 页面元件的动画可以通过 transition 或 animation 实现，利用 last、status 和 flag 的组合，可以灵活的操控页面动画的执行，这也是 fullScreen.js 的核心思想
 
 ```css
@@ -179,8 +183,11 @@ body {
 // @id { String } 节点 id 名称，必填
 // @option { Object } 所有属性选填
 var fs = new fullScreen(id, {
-  duration: 1000,  // { Number } 滑屏过渡时间，单位 ms
-  current: 0       // { Number } 当前页面处于哪一屏，用于调试
+  duration: 1000   // { Number } 滑屏过渡时间，单位 ms
+  current: 0       // { Number } 
+  max: 50          // { Number } 滑动距离为多少 px 时触发翻页
+  publicPath: ''   // 资源路径的公共前缀，通常由构建工具自动添加。针对没有构建工具的简单场景，可设置改选项
+  onChange: function (current) {}    // 触发翻页时的钩子函数，参数为当前页数
 })
 ```
 
@@ -188,6 +195,8 @@ var fs = new fullScreen(id, {
 - duration 期间滑动事件会被锁住，因为动效可能还没有执行完
 - 在调试阶段，为了看到第 n 页的动效，每次刷新后都要手动滑屏滑 n 次才能看到，或者必须自己手动修改 status 的值，这是非常麻烦的，因此调试阶段设置 current 属性，可以直接跳到第 n 页
 
+
 ### 可能的缺陷
+
 - 所有页面滑屏切换的过渡期是一样的，当然，如果不一样，应视为设计的缺陷
 - 从 0 开始计算页数，可能违背通常的计数习惯
