@@ -1,160 +1,216 @@
 /**
+ * Author @Bison
  * Doc: https://github.com/itouzigithub/itz-h5/blob/master/fullScreen.js/doc.md
  */
 
-function fullScreen (id, option) {
-  var el = document.getElementById(id);
-  if (!el) {
-    return new Error('cannot find element by id -' + id)
-  }
-
-  var result = this.extend({
-    current: 0,
-    duration: 1000,
-    onChange: function () {},
-    publicPath: ''
-  }, option)
-
-  this.el = el;
-  this.total = el.children.length;          // 总屏数
-  this.last = 0;                            // 上一页 id
-  this.current = 0;                         // 当前页 id
-  this.duration = result.duration           // 过渡期
-  this.loaded = [];                         // 已加载图片的页面 id
-  this.onChange = result.onChange;          // 钩子函数，页面变化时调用
-  this.publicPath = result.publicPath;
-  this.max = result.max || 50;
-  this.lock = false;
-  this.init();
-
-  if (result.current && result.current > 0 && result.current < this.total) {
-    this.debug(result.current)
+(function (global, factory) {
+  if (typeof exports === 'object' && typeof module !== 'undefined') {
+    module.exports = factory()
   } else {
-    el.setAttribute('last', this.last.toString());
+    window.fullScreen = factory()
   }
-}
+})(window, function () {
 
-fullScreen.prototype.init = function () {
-  var start = 0;      // 手指触碰起点
-  var distance = 0;   // 手指滑动距离
-  var _this = this;
+  var NOOP = function () {}
 
-  document.addEventListener('touchstart', function (e) {
-    if (_this.lock) return;
-    distance = 0;
-    start = e.touches[0].pageY;
-  }, false);
-
-  document.addEventListener('touchmove', function (e) {
-    if (_this.lock) return;
-    distance = e.touches[0].pageY - start;
-  }, false);
-
-  document.addEventListener('touchend', function () {
-    if (_this.lock) return;
-    _this.lock = true;
-    setTimeout(function () {
-      _this.lock = false;
-    }, _this.duration)
-    if (distance > _this.max) {
-      _this.handleStatus(-1);
-    }
-    if (distance < -_this.max) {
-      _this.handleStatus(1);
-      _this.preload(_this.current);
-    }
-  }, false);
-}
-
-/**
- * @param dir { Number } -1 向下滑 | 1 向上滑
- */
-fullScreen.prototype.handleStatus = function (dir) {
-  if (this.current === 0 && dir === -1) return;
-  if (this.current === this.total - 1 && dir === 1) return;
-
-  this.last = this.current;
-  this.el.setAttribute('last', this.last.toString());
-  this.el.setAttribute('dir', dir.toString())
-
-  var id = this.current.toString();
-  var cur = document.getElementById(id);
-  cur.setAttribute('status', dir.toString());
-
-  this.current += dir;
-
-  id = this.current.toString();
-  var next = document.getElementById(id);
-  next.setAttribute('status', '0');
-
-  if (cur.getAttribute('flag') !== undefined) {
-    setTimeout(function () {
-      cur.setAttribute('flag', dir.toString());
-    }, this.duration)
+  var attr = function (node, value) {
+    node.setAttribute('status', value);
+    node.setAttribute('flag', value);
   }
 
-  if (next.getAttribute('flag') !== undefined) {
-    setTimeout(function () {
-      next.setAttribute('flag', '0');
-    }, this.duration)
-  }
-
-  this.onChange(this.current)
-}
-
-/**
- * 图片预加载
- */
-fullScreen.prototype.preload = function (current) {
-  var id = current + 1;
-  if (id === this.total || this.loaded.indexOf(id) > -1) return;
-  var page = document.getElementById(id.toString());
-  var imgs = page.querySelectorAll('[data-src]');
-
-  for (var i = 0, len = imgs.length; i < len; i++) {
-    var url = imgs[i].getAttribute('data-src');
-    if (url) {
-      url = this.publicPath + url;
-      if (imgs[i].nodeName === "IMG") {
-        imgs[i].src = url;
-      } else {
-        imgs[i].style.backgroundImage = 'url(' + url + ')';
+  var extend = function (tar, src) {
+    if (Object.prototype.toString.call(src) !== '[object Object]') return tar;
+    for (var key in tar) {
+      if (src[key] !== undefined) {
+        tar[key] = src[key]
       }
     }
+    return tar
   }
 
-  this.loaded.push(id)
-}
-
-fullScreen.prototype.debug = function (id) {
-  var last = id - 1;
-  this.current = id;
-  this.el.setAttribute('last', last.toString());
-
-  attr(document.getElementById(id.toString()), '0');
-
-  while (id-- > 0) {
-    attr(document.getElementById(id.toString()), '1');
+  var getName = function (node) {
+    var name = node.getAttribute('name');
+    return name ? name : ''
   }
 
-  for (var i = 1; i < this.total; i++) {
-    this.preload(i);
-  }
+  var fullScreen = function (id, option) {
+    var el = document.getElementById(id);
+    if (!el) {
+      return new Error('cannot find element by id -' + id)
+    }
 
-  function attr (node, value) {
-    node.setAttribute('status', value);
-    if (node.getAttribute('flag') !== undefined) {
-      node.setAttribute('flag', value);
+    var result = extend({
+      current: 0,
+      duration: 1000,
+      afterChange: NOOP,
+      beforeChange: null,
+      publicPath: '',
+      max: 50,
+      exclude: []
+    }, option)
+
+    this.lock = false;
+    this.next = this.next.bind(this)
+    this.dir = 1;                             // -1 向下滑 | 1 向上滑
+    this.el = el;
+    this.children = el.children;
+    this.total = el.children.length;          // 总屏数
+    this.last = 0;                            // 上一页 index
+    this.current = 0;                         // 当前页 index
+    this.loaded = [];                         // 已加载图片的页面的页数
+    this.duration = result.duration           // 过渡期
+    this.publicPath = result.publicPath;      // 文件资源公共路径
+    this.max = result.max;                    // 滑动距离大于多少时触发翻页
+    this.exclude = result.exclude;            // 某些页面需要解开滑动
+    this.beforeChange = result.beforeChange;  // 钩子函数，页面变化前调用
+    this.afterChange = result.afterChange;    // 钩子函数，页面变化后调用
+
+    this.init();
+
+    var cur = result.current;
+    if (cur && cur > 0 && cur < this.total) {
+      this.goTo(cur)
+    } else {
+      el.setAttribute('last', this.last.toString());
     }
   }
-}
 
-fullScreen.prototype.extend = function (tar, src) {
-  if (Object.prototype.toString.call(src) !== '[object Object]') return tar;
-  for (var key in tar) {
-    if (src[key] !== undefined) {
-      tar[key] = src[key]
+  fullScreen.prototype.init = function () {
+    var start = 0;      // 手指触碰起点
+    var distance = 0;   // 手指滑动距离
+    var _this = this;
+
+    document.addEventListener('touchstart', function (e) {
+      if (_this.lock) return;
+      start = e.touches[0].pageY;
+    }, false);
+
+    document.addEventListener('touchmove', function (e) {
+      if (_this.exclude.indexOf(_this.current) < 0) {
+        e.preventDefault();
+      }
+      if (_this.lock) return;
+      distance = e.touches[0].pageY - start;
+    }, false);
+
+    document.addEventListener('touchend', function () {
+      if (_this.lock) return;
+      _this.lock = true;
+      setTimeout(function () {
+        _this.lock = false;
+      }, _this.duration)
+
+      if (distance > _this.max) {
+        _this.handleStatus(-1);
+      }
+      if (distance < -_this.max) {
+        _this.handleStatus(1);
+      }
+
+      distance = 0;
+    }, false);
+  }
+
+  /**
+   * @param dir { Number } -1 向下滑 | 1 向上滑
+   */
+  fullScreen.prototype.handleStatus = function (dir) {
+    if (this.current === 0 && dir === -1) return;
+    if (this.current === this.total - 1 && dir === 1) return;
+
+    this.dir = dir;
+    var name = getName(this.children[this.current]);
+
+    if (this.beforeChange) {
+      this.beforeChange(
+        this.next,
+        this.current,
+        name,
+        dir
+      )
+    } else {
+      this.next()
     }
   }
-  return tar
-}
+
+  fullScreen.prototype.next = function (dir) {
+    var direction = dir ? dir : this.dir;
+    this.el.setAttribute('last', this.current.toString());
+    this.el.setAttribute('dir', direction.toString())
+
+    var curEl = this.children[this.current];
+    curEl.setAttribute('status', direction);
+
+    this.current += direction;
+
+    var nextEl = this.children[this.current];
+    nextEl.setAttribute('status', '0');
+
+    setTimeout(function () {
+      curEl.setAttribute('flag', direction.toString());
+      nextEl.setAttribute('flag', '0');
+    }, this.duration)
+
+    // 预加载下一页的图片
+    this.preload(this.current + 1);
+
+    // 触发钩子函数
+    this.afterChange(this.current, getName(nextEl))
+  }
+
+  /**
+   * 图片预加载
+   * index { Number } 预加载哪一页的资源
+   */
+  fullScreen.prototype.preload = function (index) {
+    if (index === this.total || this.loaded.indexOf(index) > -1) return;
+    var page = this.children[index];
+    var targets = page.querySelectorAll('[data-src]');
+
+    for (var i = 0, len = targets.length; i < len; i++) {
+      var url = targets[i].getAttribute('data-src');
+      if (url) {
+        url = this.publicPath + url;
+        if (targets[i].nodeName === "IMG") {
+          targets[i].src = url;
+        } else {
+          targets[i].style.backgroundImage = 'url(' + url + ')';
+        }
+      }
+    }
+
+    this.loaded.push(index)
+  }
+
+  /**
+   * 直接跳转到某个页面，可用于开发调试
+   */
+  fullScreen.prototype.goTo = function (index) {
+    var last = index - 1 >= 0 ? index - 1 : index + 1;
+    this.current = index;
+    this.el.setAttribute('last', last.toString());
+
+    attr(this.children[index], '0');
+
+    var copy = index;
+
+    while (index-- > 0) {
+      attr(this.children[index], '1');
+    }
+
+    while (++copy < this.total) {
+      attr(this.children[copy], '-1');
+    }
+
+    for (var i = 1; i < this.total; i++) {
+      this.preload(i);
+    }
+
+    this.afterChange(
+      this.current, 
+      getName(this.children[this.current])
+    )
+  }
+
+  return fullScreen
+});
