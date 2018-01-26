@@ -203,7 +203,7 @@ var fs = new fullScreen(id, {
 })
 ```
 
-#### options
+#### Options
 
 - duration: 1000
   + { Number } 滑屏过渡时间，单位 ms
@@ -214,7 +214,9 @@ var fs = new fullScreen(id, {
 - publicPath: ''   
   + 资源路径的公共前缀，通常由构建工具自动添加。针对没有构建工具的简单场景，可设置该选项
 - exclude: []
-  + 如果某些页面包含需要上下滑动的内容，会与 fullScreen.js 产生冲突，因此需要将相应的 index 添加到 exclude 中
+  + 为了防止 IOS 浏览器中，上滑下滑导致整个页面位移，fullScreen.js 针对 IOS，在 touchmove 事件中使用了 `event.preventDefault()`
+  + 由此导致的结果是：如果某些页面存在 `overflow-y: scroll` 的子元素，子元素内容将无法上下滑动，尽管 touchmove 事件是注册在 document 上的，但子元素的滑动仍会受到 `event.preventDefault()` 的影响，而这种情况只有 IOS 存在，安卓不存在此问题
+  + 为了兼容这种情况，需要将相应的 index 添加到 exclude 中，表示：对该页的滑动事件不要使用 `event.preventDefault()`
 - beforeChange: function (next, current, name, dir) {}
   + next { Function } 如果给 beforeChange 传入了函数参数，则必须在函数中调用 next 才能继续翻页
   + current { Number } 当前页的 index
@@ -224,9 +226,20 @@ var fs = new fullScreen(id, {
 ```js
 // 在某些情况下取消滑动翻页
 beforeChange: function (next, current, name, dir) {
+  // 如果是 somePage 页并且滑动方向是向上滑，则取消翻页
   if (name === 'somePage' && dir === 1) return
+  // 否则正常执行翻页
   next()
 }
+
+// 另一种方法
+// 因为页面滑动的方法注册在 document 上，并且是冒泡阶段
+// 因此只要给页面内部子元素添加 touchend 方法，并阻止冒泡，即可取消滑动翻页
+el.addEventListener('touchend', function (e) {
+  if (/* condition */) {
+    e.stopPropagation()
+  }
+})
 ```
 
 - afterChange: function (current, name) {}
@@ -234,14 +247,22 @@ beforeChange: function (next, current, name, dir) {
   + current { Number } 翻页后的当前页的 index
   + name { String } 翻页后的当前页的 name，如果有的话
 
+#### Methods
+
+- fs.next(direction)
+  + 调用该方法，可以指定页面向上翻一页或向下翻一页
+  + direction { Number } -1 表示手指向下滑（翻到上一页），1 表示手指向上滑（翻到下一页）
+- fs.goTo(index)
+  + 调用该方法，可以指定跳转至任意页面
+
 
 ### 其它说明
+- 使用序号来标记页面，在应对需求变化时可能非常被动，比如删除中间的某个页面，会导致后续所有页面的序号都需要修改。因此最好使用 name
 - duration 期间滑动事件会被锁住，因为动效可能还没有执行完
 - 在调试阶段，为了看到第 n 页的动效，每次刷新后都要手动滑屏滑 n 次才能看到，或者必须自己手动修改 status 的值，这是非常麻烦的，因此调试阶段设置 current 属性，可以直接跳到第 n 页
-- 使用序号来标记页面，在应对需求变化时可能非常被动，比如删除中间的某个页面，则后续所有页面的序号都需要修改，因此最好使用 name
 
 
-### 可能的缺陷
+### 可能的扩展方向
 
-- 所有页面滑屏切换的过渡期是一样的，可考虑新增配置选项
-- 从 0 开始计算页数，可能违背通常的计数习惯
+- 目前所有页面滑屏切换的过渡期时长是一样的，可考虑新增配置选项，给某些页面单独设置过渡期
+- exclude 参数和 fs.goTo() 方法的参数允许指定为 name，以更好的应对需求变更的情况

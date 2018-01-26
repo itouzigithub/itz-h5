@@ -1,15 +1,19 @@
 /**
  * Author @Bison
- * Doc: https://github.com/itouzigithub/itz-h5/blob/master/fullScreen.js/doc.md
+ * Doc: https://github.com/itouzigithub/itz-h5/blob/master/fullScreen.js
  */
 
 (function (global, factory) {
   if (typeof exports === 'object' && typeof module !== 'undefined') {
     module.exports = factory()
   } else {
-    window.fullScreen = factory()
+    global.fullScreen = factory()
   }
 })(window, function () {
+
+  var ua = navigator.userAgent;
+
+  var isIOS = /iphone|ipod/.test(ua.toLowerCase());
 
   var NOOP = function () {}
 
@@ -86,7 +90,7 @@
     }, false);
 
     document.addEventListener('touchmove', function (e) {
-      if (_this.exclude.indexOf(_this.current) < 0) {
+      if (isIOS && _this.exclude.indexOf(_this.current) < 0) {
         e.preventDefault();
       }
       if (_this.lock) return;
@@ -152,7 +156,7 @@
     }, this.duration)
 
     // 预加载下一页的图片
-    this.preload(this.current + 1);
+    this.preload(this.current + direction);
 
     // 触发钩子函数
     this.afterChange(this.current, getName(nextEl))
@@ -190,6 +194,8 @@
     this.current = index;
     this.el.setAttribute('last', last.toString());
 
+    this.preload(index)
+    
     attr(this.children[index], '0');
 
     var copy = index;
@@ -200,10 +206,6 @@
 
     while (++copy < this.total) {
       attr(this.children[copy], '-1');
-    }
-
-    for (var i = 1; i < this.total; i++) {
-      this.preload(i);
     }
 
     this.afterChange(
