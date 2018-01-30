@@ -77,7 +77,7 @@
 
 - fullScreen.js 仅仅处理 touch 事件，并相应的改变 status、flag 和 last 属性，所有的 CSS 需要自己实现
 
-- fullScreen.js 内置了图片懒加载功能，该方法在滑屏时调用，默认预先加载当前页下一页的图片资源。懒加载只对从 0 算起的第 2 页及以后的页面有用，前两屏的资源必须直接加载。
+- fullScreen.js 内置了图片懒加载功能，该方法在滑屏时调用，默认预先加载当前页下一页的图片资源。
 
 - 设置懒加载的方法就是将图片 url 写在 data-src 属性中，fullScreen.js 会检测，如果是 img 节点，则设置 src，否则会设置成背景图 `background-image: url()`
 
@@ -266,3 +266,4 @@ el.addEventListener('touchend', function (e) {
 
 - 目前所有页面滑屏切换的过渡期时长是一样的，可考虑新增配置选项，给某些页面单独设置过渡期
 - exclude 参数和 fs.goTo() 方法的参数允许指定为 name，以更好的应对需求变更的情况
+- 目前 fullScreen.js 仅支持移动端，可以考虑兼容 PC 端（增加 mousedown、mousemove、mouseup）

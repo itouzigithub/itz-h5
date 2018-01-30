@@ -72,6 +72,8 @@
     this.init();
 
     var cur = result.current;
+    this.preload(cur + 1);
+
     if (cur && cur > 0 && cur < this.total) {
       this.goTo(cur)
     } else {
@@ -167,7 +169,7 @@
    * index { Number } 预加载哪一页的资源
    */
   fullScreen.prototype.preload = function (index) {
-    if (index === this.total || this.loaded.indexOf(index) > -1) return;
+    if (index >= this.total || index < 0 || this.loaded.indexOf(index) > -1) return;
     var page = this.children[index];
     var targets = page.querySelectorAll('[data-src]');
 
@@ -180,6 +182,7 @@
         } else {
           targets[i].style.backgroundImage = 'url(' + url + ')';
         }
+        targets[i].removeAttribute('data-src');
       }
     }
 
