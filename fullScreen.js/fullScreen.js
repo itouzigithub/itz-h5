@@ -69,6 +69,16 @@
     this.beforeChange = result.beforeChange;  // 钩子函数，页面变化前调用
     this.afterChange = result.afterChange;    // 钩子函数，页面变化后调用
 
+    this.indexMap = {};
+
+    var _this = this;
+
+    Array.prototype.forEach.call(this.children, function (el, index) {
+      if (getName(el)) {
+        _this.indexMap[index] = getName(el)
+      }
+    })
+
     this.init();
 
     var cur = result.current;
@@ -92,7 +102,8 @@
     }, false);
 
     document.addEventListener('touchmove', function (e) {
-      if (isIOS && _this.exclude.indexOf(_this.current) < 0) {
+      var name = _this.indexMap[_this.current];
+      if (isIOS && (_this.exclude.indexOf(_this.current) < 0 || _this.exclude.indexOf(name) > 0)) {
         e.preventDefault();
       }
       if (_this.lock) return;
@@ -170,6 +181,7 @@
    */
   fullScreen.prototype.preload = function (index) {
     if (index >= this.total || index < 0 || this.loaded.indexOf(index) > -1) return;
+
     var page = this.children[index];
     var targets = page.querySelectorAll('[data-src]');
 
@@ -198,6 +210,7 @@
     this.el.setAttribute('last', last.toString());
 
     this.preload(index)
+    this.preload(index - 1)
     
     attr(this.children[index], '0');
 

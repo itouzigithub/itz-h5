@@ -217,6 +217,7 @@ var fs = new fullScreen(id, {
   + 为了防止 IOS 浏览器中，上滑下滑导致整个页面位移，fullScreen.js 针对 IOS，在 touchmove 事件中使用了 `event.preventDefault()`
   + 由此导致的结果是：如果某些页面存在 `overflow-y: scroll` 的子元素，子元素内容将无法上下滑动，尽管 touchmove 事件是注册在 document 上的，但子元素的滑动仍会受到 `event.preventDefault()` 的影响，而这种情况只有 IOS 存在，安卓不存在此问题
   + 为了兼容这种情况，需要将相应的 index 添加到 exclude 中，表示：对该页的滑动事件不要使用 `event.preventDefault()`
+  + 也支持添加 name
 - beforeChange: function (next, current, name, dir) {}
   + next { Function } 如果给 beforeChange 传入了函数参数，则必须在函数中调用 next 才能继续翻页
   + current { Number } 当前页的 index
@@ -265,5 +266,5 @@ el.addEventListener('touchend', function (e) {
 ### 可能的扩展方向
 
 - 目前所有页面滑屏切换的过渡期时长是一样的，可考虑新增配置选项，给某些页面单独设置过渡期
-- exclude 参数和 fs.goTo() 方法的参数允许指定为 name，以更好的应对需求变更的情况
+- fs.goTo() 方法的参数允许指定为 name，以更好的应对需求变更的情况
 - 目前 fullScreen.js 仅支持移动端，可以考虑兼容 PC 端（增加 mousedown、mousemove、mouseup）
