@@ -13,8 +13,6 @@
 
   var ua = navigator.userAgent;
 
-  var isIOS = /iphone|ipod/.test(ua.toLowerCase());
-
   var NOOP = function () {}
 
   var attr = function (node, value) {
@@ -103,7 +101,7 @@
 
     document.addEventListener('touchmove', function (e) {
       var name = _this.indexMap[_this.current];
-      if (isIOS && !(_this.exclude.indexOf(_this.current) > -1 || _this.exclude.indexOf(name) > -1)) {
+      if (_this.exclude.indexOf(_this.current) < 0 && _this.exclude.indexOf(name) < 0)) {
         e.preventDefault();
       }
       if (_this.lock) return;

@@ -214,10 +214,10 @@ var fs = new fullScreen(id, {
 - publicPath: ''   
   + 资源路径的公共前缀，通常由构建工具自动添加。针对没有构建工具的简单场景，可设置该选项
 - exclude: []
-  + 为了防止 IOS 浏览器中，上滑下滑导致整个页面位移，fullScreen.js 针对 IOS，在 touchmove 事件中使用了 `event.preventDefault()`
+  + 为了防止 IOS 浏览器中，上滑下滑导致整个页面位移，还有安卓版微信中下滑导致页面整体下移以及下滑事件失效，fullScreen.js 在 touchmove 事件中使用了 `event.preventDefault()`
   + 由此导致的结果是：如果某些页面存在 `overflow-y: scroll` 的子元素，子元素内容将无法上下滑动，尽管 touchmove 事件是注册在 document 上的，但子元素的滑动仍会受到 `event.preventDefault()` 的影响，而这种情况只有 IOS 存在，安卓不存在此问题
-  + 为了兼容这种情况，需要将相应的 index 添加到 exclude 中，表示：对该页的滑动事件不要使用 `event.preventDefault()`
-  + 也支持添加 name
+  + 为了兼容这种情况，需要将相应页面的 index 或 name 添加到 exclude 中，表示：对该页的滑动事件不要使用 `event.preventDefault()`
+  + 例如：exclude: [2, 'page5', 6]
 - beforeChange: function (next, current, name, dir) {}
   + next { Function } 如果给 beforeChange 传入了函数参数，则必须在函数中调用 next 才能继续翻页
   + current { Number } 当前页的 index
