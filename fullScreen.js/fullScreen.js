@@ -101,7 +101,7 @@
 
     document.addEventListener('touchmove', function (e) {
       var name = _this.indexMap[_this.current];
-      if (_this.exclude.indexOf(_this.current) < 0 && _this.exclude.indexOf(name) < 0)) {
+      if (_this.exclude.indexOf(_this.current) < 0 && _this.exclude.indexOf(name) < 0) {
         e.preventDefault();
       }
       if (_this.lock) return;
