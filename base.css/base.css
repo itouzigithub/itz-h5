@@ -1,10 +1,3 @@
-/** 
- * 重要声明
- * 此代码不一定是最新版，仅供阅读
- * 实际开发请从 svn 库中引用
- * 地址：
- */
-
 /**
  * author Bison
  * update 2017-07
@@ -27,11 +20,6 @@
  * 任何修改请遵循上述原则
  */
 
-/**
- * CHANGE LOG
- * update
- * version 1.x
- */
 
 /* ----------------------------------------------------------------------------------- */
 /* ----------------------------------- Basic Reset ----------------------------------- */
@@ -39,19 +27,8 @@
 html {
   height: 100%;
   box-sizing: border-box;
-  font-size: 14px;
 }
-/* 以 iphone6 的 375px 为基准宽度，加减 25px */
-@media screen and (max-width: 350px) {
-  html { 
-    font-size: 13px;
-  }
-}
-@media screen and (min-width: 400px) {
-  html { 
-    font-size: 16px;
-  }
-}
+
 body {
   height: 100%;
   -webkit-font-smoothing: antialiased;
@@ -208,22 +185,22 @@ textarea {
 .ovh { overflow: hidden }
 .ovy { overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .lighter { font-weight: 300 }
+.bold { font-weight: bold }
 
-/* 以 1rem = 14px 为基准 */
-.f10 { font-size: 0.714rem }
-.f12 { font-size: 0.857rem }
-.f14 { font-size: 1.000rem }
-.f16 { font-size: 1.143rem }
-.f18 { font-size: 1.286rem }
-.f20 { font-size: 1.428rem }
-.f22 { font-size: 1.571rem }
-.f24 { font-size: 1.714rem }
-.f26 { font-size: 1.857rem }
-.f28 { font-size: 2.000rem }
-.f30 { font-size: 2.143rem }
-.f32 { font-size: 2.286rem }
-.f34 { font-size: 2.428rem }
-.f36 { font-size: 2.571rem }
+.f10 { font-size: 10px }
+.f12 { font-size: 12px }
+.f14 { font-size: 14px }
+.f16 { font-size: 16px }
+.f18 { font-size: 18px }
+.f20 { font-size: 20px }
+.f22 { font-size: 22px }
+.f24 { font-size: 24px }
+.f26 { font-size: 26px }
+.f28 { font-size: 28px }
+.f30 { font-size: 30px }
+.f32 { font-size: 32px }
+.f34 { font-size: 34px }
+.f36 { font-size: 36px }
 /* 可用于消除图片底部间隙 */
 .f0  { font-size: 0px }
 
